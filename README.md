@@ -57,7 +57,7 @@ File name: 6_Assignments_on_FUNGuild
 
 Step: Use command line to make functional assignments using FUNGuild.
 
-##Section 7
+## Section 7
 
 File name: 7_Format_table_for_stat_analyses
 
