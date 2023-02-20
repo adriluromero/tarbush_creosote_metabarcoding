@@ -1,0 +1,50 @@
+#Jornada_Creosote_Tarbush_Fungal_Metabarcoding
+
+#Protocol for processing Metabarcoding of soil
+#Section 6
+#File name: 6_Assignments_on_FUNGuild
+#Step: Use command line to make functional assignments using FUNGuild.
+
+
+#If this is your first time using FUNGuild refer to https://github.com/UMNFuN/FUNGuild to get started. 
+#The README.md file has a section on "Running the script locally from the command line" which explains what to do. 
+
+# 1. Run FUNGuild on command line using the formatted ASV table. 
+
+C:\Users\ecoli\Documents\FUNGuild\Metabarcoding>python guilds.py -otu FUNGUildCreosoteTarbush.2023.txt -db fungi -m -u
+
+#Below is an example of what you will see after running this command. 
+
+##EXAMPLE:
+
+#FunGuild v1.1 Beta
+#Connecting with FUNGuild database ...
+
+#Reading in the OTU table: 'FUNGUildCreosoteTarbush.2023.txt'
+
+#Searching the FUNGuild database...
+#10%
+#20%
+#30%
+#40%
+#50%
+#60%
+#70%
+#80%
+#90%
+#100%
+
+#Found 7952 matching taxonomy records in the database.
+#Dereplicating and sorting the result...
+#FunGuild tried to assign function to 8564 OTUs in 'FUNGUildCreosoteTarbush.2023.txt'.
+#FUNGuild made assignments on 4949 OTUs.
+#Result saved to 'FUNGUildCreosoteTarbush.2023.guilds.txt'
+
+#Additional output:
+#FUNGuild made assignments on 4949 OTUs, these have been saved to FUNGUildCreosoteTarbush.2023.guilds_matched.txt.
+#3615 OTUs were unassigned, these are saved to FUNGUildCreosoteTarbush.2023.guilds_unmatched.txt.
+
+#Total calculating time: 53.51 seconds.
+
+#####Save the 'FUNGUildCreosoteTarbush.2023.guilds.txt' file as .csv to use in step 7. 
+

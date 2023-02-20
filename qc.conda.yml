@@ -1,0 +1,12 @@
+---
+name: qc
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  # Base Requirements
+  - python>=3.8
+  - ipykernel
+  # Env Specific Requirements
+  - fastqc
+  - multiqc

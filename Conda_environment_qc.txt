@@ -1,0 +1,21 @@
+#Jornada_Creosote_Tarbush_Fungal_Metabarcoding
+
+#Protocol for processing Metabarcoding of soil
+#File name: Conda_environment_qc
+#Step: Build the 'qc' Conda environment.
+
+#Follow these steps to create the 'qc' Conda environment used in this pipeline.
+
+#First, install Anaconda if you haven't done so.
+
+#Next, download the 'qc.conda.yml' file from the Github repository. 
+
+#Load Anaconda.
+
+module load conda
+
+#Create the environment using this command.
+
+conda env create -f qc.conda.yml
+
+#Optional. Practice activating the 'qc' environment.

@@ -1,0 +1,46 @@
+#Jornada_Creosote_Tarbush_Fungal_Metabarcoding
+
+#Protocol for processing Metabarcoding of soil
+#Section 3
+#File name: 3_Post_quality_reports
+#Step: Generate quality reports of post-trimmed paired-end sequences.
+
+#In this script, you will: 
+# 1. Generate fastqc reports on the quality of the post-trimmed '.fastq.gz' files.
+# 2. Use multiqc to compile the data from all individual fastqc reports into one report.
+
+
+#Memory requirements for bash script: 
+#--cpus-per-task=20 ##The number of threads the code will use
+#--mem-per-cpu=10G  ## Real memory(MB) per CPU required by the job.
+
+#1. Generate fastqc reports on the quality of the post-trimmed '.fastq.gz' files.
+
+#Activate the 'qc' conda environment to use fastqc version 0.11.9 and multiqc version 1.13
+
+echo "Load the qc environment."
+module load conda
+conda activate /fs1/project/egcc/conda_env/qc
+
+#Generate fastqc reports for all files with a '.fastq.gz' extension in the 'post-extraction' directory.
+fastqc /fs1/project/egcc/metabarcoding_tarbush_creosote/post-extraction/*.fastq.gz
+
+#Since these reports are post-trimming, create a 'post-trim' directory for the reports.
+mkdir /fs1/project/egcc/metabarcoding_tarbush_creosote/QC/post-trim
+
+echo "Move the individual fastqc reports to the post-trim directory."
+mv /fs1/project/egcc/metabarcoding_tarbush_creosote/post-extraction/*fastqc* /fs1/project/egcc/metabarcoding_tarbush_creosote/QC/post-trim
+
+#2. Use multiqc to compile the data from all individual fastqc reports into one report.
+
+#A single multiqc report makes it easier to view information on all of your files. For example, cheking for adapter content across files. 
+
+echo "Make a directory where the files will go."
+mkdir /fs1/project/egcc/metabarcoding_tarbush_creosote/QC/post-trim/multiqc
+
+echo "Run multiqc"
+multiqc /fs1/project/egcc/metabarcoding_tarbush_creosote/QC/post-trim -o /fs1/project/egcc/metabarcoding_tarbush_creosote/QC/post-trim/multiqc
+
+#Set the -o flag to the directory where you'd like to save the multiqc report.  
+
+conda deactivate

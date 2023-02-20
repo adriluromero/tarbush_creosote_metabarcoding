@@ -1,0 +1,21 @@
+#Jornada_Creosote_Tarbush_Fungal_Metabarcoding
+
+#Protocol for processing Metabarcoding of soil
+#File name: Conda_environment_qiime2_2021_11
+#Step: Build the 'qiime2_2021_11' Conda environment.
+
+#Follow these steps to create the 'qiime2_2021_11' Conda environment used in this pipeline.
+
+#First, install Anaconda if you haven't done so.
+
+#Next, download the 'qiime2-2021.11-custom.yml' file from the Github repository. 
+
+#Load Anaconda.
+
+module load conda
+
+#Create the environment using this command.
+
+conda env create -f qiime2-2021.11-custom.yml
+
+#Optional. Practice activating the 'qc' environment.

@@ -1,0 +1,147 @@
+#Jornada_Creosote_Tarbush_Fungal_Metabarcoding
+
+#Protocol for processing Metabarcoding of soil
+#Section 2
+#File name: 2_Extract_ITS2_region
+#Step: Use QIIME2 to extract the ITS2 region from the paired-end sequences.
+
+#In this script, you will: 
+# 1. Create a manifest file for downstream analyses of sequencing data with QIIME2 version 2021.11.0.
+# 2. Import each paired-end sequence using QIIME2. Check the per-sample sequence counts.
+# 3. Extract the ITS2 region from each paired-end sequence using the QIIME2 itsxpress plug-in.
+# 4. Export the ITS extracted files for downstream analysis with dada2.
+# 5. After trimming and exporting, examine the per-sample sequence counts in the 'trimmed_exact_ITS2_reverse_Dec13.qza' file.
+# 6. Create the directories to use in the dada2 step, and move the files accordingly. 
+
+#Memory requirements for bash script: 
+#--cpus-per-task=20 ##The number of threads the code will use
+#--mem-per-cpu=10G  ## Real memory(MB) per CPU required by the job.
+
+
+#1. Create a manifest file for downstream analyses of sequencing data with QIIME2 version 2021.11.0. 
+
+#To make a manifest file we need the file location for each forward and reverse sequencing files. 
+
+#Before that, make a directory for the manifest files.
+
+mkdir /fs1/project/egcc/metabarcoding_tarbush_creosote/Manifest-files
+
+#Next, change the working directory to the 'Manifest-files' directory.
+
+cd /fs1/project/egcc/metabarcoding_tarbush_creosote/Manifest-files
+
+#Find and save into a .txt file the file path to each forward (R1) & reverse (R2) sequence in the directory.
+
+find /fs1/project/egcc/metabarcoding_tarbush_creosote/files/*R1*.fastq.gz -type f > Forwardlist.txt
+
+find /fs1/project/egcc/metabarcoding_tarbush_creosote/files/*R2*.fastq.gz -type f > Reverselist.txt
+
+#Download the 'Forwardlist.txt' and 'Reverselist.txt' files into your local PC. 
+#Open a new Excel spreadsheet and label the first 3 columns as 'sample-id', 'forward-absolute-filepath', and 'reverse-absolute-filepath'. 
+#Paste the file paths from the 'Forwardlist.txt' and 'Reverselist.txt' files into its respective column. 
+#Write in the sample ID for each paired-end sequence. After 3 rows, Excel will automatically fill in the rest of the column. Make sure that the sample ID matches the forward and reverse columns.
+#Save the manifest file as *.txt (tab delimited) in Excel. Once saved, change the file extension to *.tsv
+
+##Example of Manifest file: 
+
+#sample-id	forward-absolute-filepath	                                                             reverse-absolute-filepath
+#10_S8	    /fs1/project/egcc/metabarcoding_tarbush_creosote/files/GSF3282-10_S8_R1_001.fastq.gz	/fs1/project/egcc/metabarcoding_tarbush_creosote/files/GSF3282-10_S8_R2_001.fastq.gz
+#11_S9	    /fs1/project/egcc/metabarcoding_tarbush_creosote/files/GSF3282-11_S9_R1_001.fastq.gz	/fs1/project/egcc/metabarcoding_tarbush_creosote/files/GSF3282-11_S9_R2_001.fastq.gz
+#12_S10	    /fs1/project/egcc/metabarcoding_tarbush_creosote/files/GSF3282-12_S10_R1_001.fastq.gz	/fs1/project/egcc/metabarcoding_tarbush_creosote/files/GSF3282-12_S10_R2_001.fastq.gz
+#13_S11	    /fs1/project/egcc/metabarcoding_tarbush_creosote/files/GSF3282-13_S11_R1_001.fastq.gz	/fs1/project/egcc/metabarcoding_tarbush_creosote/files/GSF3282-13_S11_R2_001.fastq.gz
+#14_S12	    /fs1/project/egcc/metabarcoding_tarbush_creosote/files/GSF3282-14_S12_R1_001.fastq.gz	/fs1/project/egcc/metabarcoding_tarbush_creosote/files/GSF3282-14_S12_R2_001.fastq.gz
+#15_S13	    /fs1/project/egcc/metabarcoding_tarbush_creosote/files/GSF3282-15_S13_R1_001.fastq.gz	/fs1/project/egcc/metabarcoding_tarbush_creosote/files/GSF3282-15_S13_R2_001.fastq.gz
+
+#As you can see, the paths to the forward and reverve files for each sample is listed in the Manifest file. 
+
+echo "Use the manifest file to import the sequences into the qiime2 conda environment for downstream analyses."
+  
+#2. Import each paired-end sequence using QIIME2. Check the per-sample sequence counts.
+
+#Load the 'qiime2_2021_11-custom' conda environment.
+
+module load conda
+conda activate /fs1/project/egcc/conda_env/qiime2_2021_11-custom
+
+#Make a directory where the output will go
+
+mkdir /fs1/project/egcc/metabarcoding_tarbush_creosote/ITSextracted
+
+echo "Import the paired-end sequences using the manifest file."
+
+qiime tools import \
+--type 'SampleData[PairedEndSequencesWithQuality]' \
+--input-path /fs1/project/egcc/metabarcoding_tarbush_creosote/Manifest-files/creosote-tarbush-manifest-file.tsv \
+--output-path /fs1/project/egcc/metabarcoding_tarbush_creosote/ITSextracted/paired_end_demux_reverse_Dec13.qza \
+--input-format PairedEndFastqManifestPhred33V2
+
+#If this runs well, then your sequences were imported and you will have a 'paired_end_demux_reverse_Dec13.qza' file.
+
+#Before trimming, examine the per-sample sequence counts in the 'paired_end_demux_reverse_Dec13.qza' file.
+
+#First, create a .qzv file. 
+
+qiime demux summarize \
+--i-data /fs1/project/egcc/metabarcoding_tarbush_creosote/ITSextracted/paired_end_demux_reverse_Dec13.qza \
+--o-visualization /fs1/project/egcc/metabarcoding_tarbush_creosote/ITSextracted/paired_end_demux_reverse_Dec13.qzv
+
+#Download the 'paired_end_demux_reverse_Dec13.qzv' output file into the local PC.
+#Upload and view the 'paired_end_demux_reverse_Dec13.qzv' file on https://view.qiime2.org 
+
+#The visualization of 'paired_end_demux_reverse_Dec13.qzv' yields good results. 
+#This means all of the paired end sequences had a good number of forward sequence and reverse sequence counts. 
+
+#3. Extract the ITS2 region from each paired-end sequence using the QIIME2 itsxpress plug-in.
+
+qiime itsxpress trim-pair-output-unmerged \
+--i-per-sample-sequences /fs1/project/egcc/metabarcoding_tarbush_creosote/ITSextracted/paired_end_demux_reverse_Dec13.qza \
+--p-region ITS2 \
+--p-taxa F \
+--p-reversed-primers \
+--p-cluster-id 1.0 \
+--p-threads 3 \
+--o-trimmed trimmed_exact_ITS2_reverse_Dec13.qza \
+--verbose
+
+#These paired-end sequences are reversed, so the '--p-reversed-primers' flag is included. 
+#If your primers are not reversed then ommit this flag. 
+#Your output file name is set in the '--o-trimmed' flag.
+
+#4. Export the trimmed paired-end sequences for downstream analysis with dada2.
+
+mkdir /fs1/project/egcc/metabarcoding_tarbush_creosote/post-extraction
+
+qiime tools export \
+--input-path /fs1/project/egcc/metabarcoding_tarbush_creosote/ITSextracted/trimmed_exact_ITS2_reverse_Dec13.qza \
+--output-path /fs1/project/egcc/metabarcoding_tarbush_creosote/post-extraction
+
+#5. After trimming and exporting, examine the per-sample sequence counts in the 'trimmed_exact_ITS2_reverse_Dec13.qza' file.
+
+#First, create a .qzv file. 
+
+qiime demux summarize \
+--i-data /fs1/project/egcc/metabarcoding_tarbush_creosote/ITSextracted/trimmed_exact_ITS2_reverse_Dec13.qza \
+--o-visualization /fs1/project/egcc/metabarcoding_tarbush_creosote/ITSextracted/trimmed_exact_ITS2_reverse_Dec13.qzv
+
+#Then, download the 'trimmed_exact_ITS2_reverse_Dec13.qzv' output file into the local PC.
+#Upload and view the 'trimmed_exact_ITS2_reverse_Dec13.qzv' file on https://view.qiime2.org
+
+#Optional. Keep a copy of this report as it has information on per-sample sequence counts post-trimming.
+
+#6. Create the directories to use in the dada2 step, and move the files accordingly. 
+
+mkdir /fs1/project/egcc/metabarcoding_tarbush_creosote/dada2
+
+#For the forward reads:
+mkdir /fs1/project/egcc/metabarcoding_tarbush_creosote/dada2/Read_1_ITSx
+
+#For the reverse reads:
+mkdir /fs1/project/egcc/metabarcoding_tarbush_creosote/dada2/Read_2_ITSx
+
+#Copy and paste the R1 or forward sequences into the 'Read_1_ITSx' directory. 
+cp /fs1/project/egcc/metabarcoding_tarbush_creosote/post-extraction/*L001_R1*.fastq.gz /fs1/project/egcc/metabarcoding_tarbush_creosote/dada2/Read_1_ITSx
+
+#Copy and paste the R2 or reverse sequences into the 'Read_2_ITSx' directory. 
+cp /fs1/project/egcc/metabarcoding_tarbush_creosote/post-extraction/*L001_R2*.fastq.gz /fs1/project/egcc/metabarcoding_tarbush_creosote/dada2/Read_2_ITSx
+
+conda deactivate
