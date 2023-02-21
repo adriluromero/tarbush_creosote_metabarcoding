@@ -6,7 +6,7 @@
 #Step: Use RStudio to format the 'otu.tax.table.csv' for input in FUNGuild.
 
 #In this script, you will: 
-# 1. Combine the taxonomic information into one column called 'Taxonomy'.
+# 1. Combine the taxonomic information into one column called 'taxonomy'.
 # 2. Finish formatting the table for input in FUNGuild.
 # 3. Write a csv 
 
@@ -14,7 +14,7 @@
 #Clear environment
 rm(list = ls(all.names = TRUE))
 
-#1. Combine the taxonomic information into one column called 'Taxonomy'.
+#1. Combine the taxonomic information into one column called 'taxonomy'.
 
 #Import the file. 
 ASV <- read.csv("/project/egcc/metabarcoding_tarbush_creosote/OTU-tables/2023-OTUs/otu.tax.table.csv")
