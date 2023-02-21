@@ -15,6 +15,8 @@ Open command Prompt.
 
 Use the command cd to set the directory to where the 'guild.py' script is saved.
 
+Now, type this in command line:
+
 C:\Users\ecoli\Documents\FUNGuild\Metabarcoding>python guilds.py -otu FUNGUildCreosoteTarbush.2023.txt -db fungi -m -u
 
 #Below is an example of what you will see after running this command. 
