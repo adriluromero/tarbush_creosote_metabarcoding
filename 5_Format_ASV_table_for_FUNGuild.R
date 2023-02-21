@@ -35,6 +35,6 @@ ASV2 <- ASV[, -c(62:68)]
 
 #3. Write a csv 
 
-write.csv(ASV2, "/project/egcc/metabarcoding_tarbush_creosote/OTU-tables/2023-OTUs/funguild/FUNGUildCreosoteTarbush.csv")
+write.csv(ASV2, "/project/egcc/metabarcoding_tarbush_creosote/OTU-tables/2023-OTUs/funguild/FUNGUildCreosoteTarbush.csv", row.names = FALSE)
 
 #Proceed to running FUNGuild on command line using the 'FUNGUildCreosoteTarbush.csv' file as .txt
