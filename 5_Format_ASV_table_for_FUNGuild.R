@@ -19,7 +19,7 @@ rm(list = ls(all.names = TRUE))
 #Import the file. 
 ASV <- read.csv("/project/egcc/metabarcoding_tarbush_creosote/OTU-tables/2023-OTUs/otu.tax.table.csv")
 
-#FUNGuild requires one column named "Taxonomy" that follows this format. 
+#FUNGuild requires one column named "taxonomy" that follows this format. 
 #k__Fungi;p__Basidiomycota;c__Agaricomycetes;o__Corticiales;f__Corticiaceae;g__Laetisaria;s__Laetisaria_fuciformis
 
 #Do this by pasting the information from the taxonomic ranks into a column separated by ';'
