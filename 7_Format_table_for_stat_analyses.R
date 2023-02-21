@@ -36,7 +36,7 @@ write.csv(Funguild, "/project/egcc/metabarcoding_tarbush_creosote/OTU-tables/202
 
 #The next step is to manually curate this dataset. 
 #You do so by: 
-# A) deleting the samples that have no sequences. For this dataset, refer to the 'Excluded_Samples.txt' file.
+# A) deleting the samples that have no sequences. 
 # B) removing repeated samples from the same plot to avoid pseudoreplication issues. 
 # C) removing ASVs with zero counts.  
 
